@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:foregroundTint="@color/gray.50">
+    android:foregroundTint="@color/gray_50">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -59,10 +59,11 @@
             android:layout_gravity="center"
             android:background="@android:color/transparent"
             app:srcCompat="@drawable/ic_notifications_24"
-            app:tint="@color/gray.200" />
+            app:tint="@color/gray_500" />
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/tabLayoutContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -123,5 +124,14 @@
                 android:text="SUN" />
         </com.google.android.material.tabs.TabLayout>
     </androidx.cardview.widget.CardView>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/taskViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tabLayoutContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
