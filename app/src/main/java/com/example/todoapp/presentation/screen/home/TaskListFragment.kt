@@ -2,51 +2,47 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.example.todoapp.databinding.FragmentTaskListBinding
-import com.example.todoapp.domain.model.Task
+import androidx.recyclerview.widget.RecyclerView.Recycler
+import com.example.todoapp.R
+import com.example.todoapp.databinding.FragmentTaskGroupListBinding
 import com.example.todoapp.domain.model.TaskGroup
+import com.example.todoapp.presentation.screen.home.HomeViewModel
+import com.example.todoapp.presentation.screen.home.TaskGroupListAdapter
 import com.example.todoapp.presentation.screen.home.TaskListRecyclerAdapter
+import kotlinx.coroutines.launch
 
-class TaskListFragment(private val taskList: List<TaskGroup>): Fragment() {
-    private lateinit var binding: FragmentTaskListBinding
+class TaskListFragment: Fragment() {
+    private lateinit var binding: FragmentTaskGroupListBinding
+    private lateinit var viewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentTaskListBinding.inflate(inflater, container, false)
+        binding = FragmentTaskGroupListBinding.inflate(inflater, container, false)
         val view = binding.root
 
-//        arguments?.apply {
-//            binding.textView.text = getString(TITLE)
-//        }
+        // TODO: Add koin
+        viewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
 
-        binding.taskList.adapter = TaskListRecyclerAdapter(taskList)
-        binding.taskList.layoutManager = LinearLayoutManager(requireContext())
+        val taskGroupListAdapter = TaskGroupListAdapter(viewModel.filteredTaskListGroup.value)
+
+        binding.rvTaskGroupList.adapter = taskGroupListAdapter
+        binding.rvTaskGroupList.layoutManager = LinearLayoutManager(view.context)
+
+        lifecycleScope.launch {
+            viewModel.filteredTaskListGroup.collect(taskGroupListAdapter::updateTaskListGroup)
+        }
 
         return view
     }
-
-//    companion object {
-//        fun create(taskList: List<TaskGroup>): TaskListFragment {
-//            val fg = TaskListFragment()
-//
-//            val args = Bundle().apply {
-//                putArr
-//                putString(TITLE, task.title)
-//            }
-//
-//            fg.arguments = args
-//
-//            return fg
-//        }
-//
-//        const val TITLE = "TASK_NAME"
-//        const val DATE = "TASK_DATE"
-//        const val CATEGORY = "TASK_CATEGORY"
-//    }
 }

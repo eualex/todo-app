@@ -1,11 +1,12 @@
 package com.example.todoapp.presentation.screen.home.helpers
 
+import com.example.todoapp.domain.model.WeekDay
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 fun formatDate(pattern: String, date: Calendar): String {
-    val formatter = SimpleDateFormat(pattern, Locale.getDefault())
+    val formatter = SimpleDateFormat(pattern, Locale("pt", "BR"))
     return formatter.format(date.time)
 }
 
@@ -20,16 +21,19 @@ fun getWeekDaysWithDates(): List<WeekDay> {
     val monday = Calendar.getInstance().apply {
         set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
     }
+    val tomorrow = (today.clone() as Calendar).apply { add(Calendar.DAY_OF_MONTH, 1) }
 
     return (0..6).map { i ->
         val date = (monday.clone() as Calendar).apply {
             add(Calendar.DAY_OF_MONTH, i)
         }
-        val weekDay = formatDate("E", date)
+        val shortWeekDay = formatDate("E", date).replaceFirstChar { it.uppercaseChar() }
+        val weekDay = formatDate("EEEE", date).replaceFirstChar { it.uppercaseChar() }
         val weekNumberDay = formatDate("dd", date)
         val isDisabled = date.before(today)
+        val isTomorrow = isSameDay(date, tomorrow)
         val isCurrentDay = isSameDay(date, today)
 
-        WeekDay(weekDay, weekNumberDay, isDisabled, isCurrentDay)
+        WeekDay(shortWeekDay, weekDay, weekNumberDay, isDisabled, isCurrentDay, isTomorrow, date)
     }
 }

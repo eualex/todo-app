@@ -1,6 +1,6 @@
 package com.example.todoapp.domain.model
 
 data class TaskGroup(
-    val date: String,
+    val weekDay: WeekDay,
     val items: List<Task>
 )

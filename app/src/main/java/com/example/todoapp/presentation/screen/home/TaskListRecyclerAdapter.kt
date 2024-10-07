@@ -12,14 +12,14 @@ import com.example.todoapp.R
 import com.example.todoapp.domain.model.Task
 import com.example.todoapp.domain.model.TaskGroup
 
-class TaskListRecyclerAdapter(private val taskList: List<TaskGroup>): Adapter<TaskListRecyclerAdapter.TaskViewHolder>() {
+class TaskListRecyclerAdapter(private val taskList: List<Task>): Adapter<TaskListRecyclerAdapter.TaskViewHolder>() {
     inner class TaskViewHolder(private val view: View): ViewHolder(view) {
         fun bind(task: Task) {
             val taskTitle = view.findViewById<TextView>(R.id.taskTitle)
             val taskCard = view.findViewById<CardView>(R.id.taskCard)
             val taskCategory = view.findViewById<TextView>(R.id.taskCategory)
             taskTitle.text = task.title
-            taskCategory.text = task.category.toString().replaceFirstChar { it.uppercaseChar() }
+            taskCategory.text = task.category.title.replaceFirstChar { it.uppercaseChar() }
 
             taskCard.setOnClickListener { view ->
                 val checkbox = view.findViewById<CheckBox>(R.id.taskCheckbox)
@@ -40,8 +40,8 @@ class TaskListRecyclerAdapter(private val taskList: List<TaskGroup>): Adapter<Ta
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        holder.bind(taskList.first().items[position])
+        holder.bind(taskList[position])
     }
 
-    override fun getItemCount(): Int = taskList.first().items.size
+    override fun getItemCount(): Int = taskList.size
 }

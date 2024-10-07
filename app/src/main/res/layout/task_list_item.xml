@@ -40,7 +40,7 @@
                 android:layout_marginVertical="12dp"
                 android:background="@null"
                 android:id="@+id/taskCheckbox"
-                android:foreground="@drawable/checkbox" />
+                android:foreground="@drawable/task_checkbox" />
 
             <TextView
                 android:id="@+id/taskTitle"
