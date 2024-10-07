@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.transition.Visibility
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentSearchBinding
 import kotlinx.coroutines.launch
@@ -41,20 +40,19 @@ class SearchFragment : Fragment() {
     }
 
     private fun setupSearchResult() {
-        val adapter = SearchResultListAdapter(viewModel.result.value)
-        binding.rvSearchResult.adapter = adapter
         binding.rvSearchResult.layoutManager = LinearLayoutManager(requireActivity())
 
         lifecycleScope.launch {
-            viewModel.result.collect { result ->
-                adapter.updateSearchResult(result)
-                when(result) {
+            viewModel.result.collect { searchResult ->
+                when(searchResult) {
                     is SearchResult.TaskResult -> {
+                        binding.rvSearchResult.adapter = SearchResultTaskListAdapter(searchResult.taskList)
                         binding.tvSearchResult.text = "Tarefas"
                         binding.tvSearchResult.visibility = View.VISIBLE
                         binding.tvSearchResult.setBackgroundResource(0)
                     }
                     is SearchResult.CategoryResult -> {
+                        binding.rvSearchResult.adapter = SearchResultCategoryListAdapter(searchResult.categoryList)
                         binding.tvSearchResult.text = "Categorias"
                         binding.tvSearchResult.visibility = View.VISIBLE
                         binding.tvSearchResult.setBackgroundResource(R.drawable.bottom_border)
