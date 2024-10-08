@@ -1,4 +1,4 @@
-package com.example.todoapp.presentation.screen.home
+package com.example.todoapp.presentation.screens.home
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.todoapp.R
 import com.example.todoapp.domain.model.Task
-import com.example.todoapp.domain.model.TaskGroup
 
 class TaskListRecyclerAdapter(private val taskList: List<Task>): Adapter<TaskListRecyclerAdapter.TaskViewHolder>() {
     inner class TaskViewHolder(private val view: View): ViewHolder(view) {

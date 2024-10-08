@@ -8,7 +8,7 @@
     <fragment
         tools:layout="@layout/fragment_home"
         android:id="@+id/homeFragment"
-        android:name="com.example.todoapp.presentation.screen.home.HomeFragment"
+        android:name="com.example.todoapp.presentation.screens.home.HomeFragment"
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_settingsFragment"
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.todoapp.presentation.screen.settings.SettingsFragment"
+        android:name="com.example.todoapp.presentation.screens.settings.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings">
         <action
@@ -39,7 +39,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.todoapp.presentation.screen.search.SearchFragment"
+        android:name="com.example.todoapp.presentation.screens.search.SearchFragment"
         android:label="SearchFragment"
         tools:layout="@layout/fragment_search"
         >

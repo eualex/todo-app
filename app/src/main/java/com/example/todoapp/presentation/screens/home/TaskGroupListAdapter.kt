@@ -1,4 +1,4 @@
-package com.example.todoapp.presentation.screen.home
+package com.example.todoapp.presentation.screens.home
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

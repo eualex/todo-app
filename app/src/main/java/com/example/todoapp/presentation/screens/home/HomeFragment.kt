@@ -1,4 +1,4 @@
-package com.example.todoapp.presentation.screen.home
+package com.example.todoapp.presentation.screens.home
 
 import TaskListFragment
 import android.app.DatePickerDialog
@@ -6,19 +6,16 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.Window
-import android.view.WindowManager
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -27,10 +24,11 @@ import com.example.todoapp.databinding.FragmentHomeBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import java.util.Calendar
 
 class HomeFragment : Fragment() {
-    private lateinit var viewModel: HomeViewModel
+    private val viewModel by activityViewModel<HomeViewModel>()
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -42,8 +40,6 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
-
-        viewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
 
         setupViewPager()
         setupTabs()

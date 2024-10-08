@@ -1,16 +1,13 @@
-package com.example.todoapp.presentation.screen.search;
+package com.example.todoapp.presentation.screens.search;
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.R
 import com.example.todoapp.domain.model.Category
-import com.example.todoapp.domain.model.Task
 
 class SearchResultCategoryListAdapter(
     private var categoryList: List<Category>

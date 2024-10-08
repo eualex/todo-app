@@ -1,4 +1,4 @@
-package com.example.todoapp.presentation.screen.settings
+package com.example.todoapp.presentation.screens.settings
 
 import android.view.LayoutInflater
 import android.view.View

@@ -1,10 +1,10 @@
-package com.example.todoapp.presentation.screen.home
+package com.example.todoapp.presentation.screens.home
 
 import androidx.lifecycle.ViewModel
 import com.example.todoapp.domain.model.Category
 import com.example.todoapp.domain.model.Task
 import com.example.todoapp.domain.model.TaskGroup
-import com.example.todoapp.presentation.screen.home.helpers.getWeekDaysWithDates
+import com.example.todoapp.presentation.screens.home.helpers.getWeekDaysWithDates
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.Calendar

@@ -1,6 +1,4 @@
-package com.example.todoapp.presentation.screen.settings
-
-import com.example.todoapp.R
+package com.example.todoapp.presentation.screens.settings
 
 data class SettingSectionItem(
     val icon: Int,

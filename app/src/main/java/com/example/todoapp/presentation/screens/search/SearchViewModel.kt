@@ -1,4 +1,4 @@
-package com.example.todoapp.presentation.screen.search
+package com.example.todoapp.presentation.screens.search
 
 import androidx.lifecycle.ViewModel
 import com.example.todoapp.domain.model.Category

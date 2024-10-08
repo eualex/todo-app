@@ -61,4 +61,5 @@ dependencies {
     implementation(libs.viewpager2)
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.core)
+    implementation(libs.koin.android)
 }

@@ -1,4 +1,4 @@
-package com.example.todoapp.presentation.screen.home.helpers
+package com.example.todoapp.presentation.screens.home.helpers
 
 import com.example.todoapp.domain.model.WeekDay
 import java.text.SimpleDateFormat
