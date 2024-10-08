@@ -12,7 +12,11 @@
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_homeFragment_to_searchFragment"
             app:destination="@id/searchFragment"
@@ -26,8 +30,13 @@
         android:id="@+id/settingsFragment"
         android:name="com.example.todoapp.presentation.screen.settings.SettingsFragment"
         android:label="SettingsFragment"
-        tools:layout="@layout/fragment_settings"
-        />
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settingsFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"/>
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.todoapp.presentation.screen.search.SearchFragment"

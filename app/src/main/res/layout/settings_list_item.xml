@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="12dp"
+    android:foreground="@drawable/top_border">
+    <TextView
+        android:id="@+id/tvSettingListItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:textSize="14sp"
+        android:textColor="@color/gray_950"
+        android:drawablePadding="12dp"
+        android:text="Tema"
+        android:layout_marginStart="8dp"
+        app:drawableStartCompat="@drawable/ic_checklist_24" />
+</LinearLayout>

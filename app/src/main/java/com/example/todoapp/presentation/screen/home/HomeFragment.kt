@@ -109,6 +109,12 @@ class HomeFragment : Fragment() {
         binding.cvMenu.setOnClickListener {
             val dialog = createDialog(R.layout.menu_bottom_dialog)
             dialog.show()
+            val configCardView = dialog.findViewById<CardView>(R.id.cvSettings)
+            configCardView.setOnClickListener {
+                findNavController()
+                    .navigate(R.id.action_homeFragment_to_settingsFragment)
+                dialog.hide()
+            }
         }
 
         binding.cvSearch.setOnClickListener {
