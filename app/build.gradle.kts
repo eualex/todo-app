@@ -59,4 +59,6 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.navigation.dynamic.features.fragment)
     implementation(libs.viewpager2)
+    implementation(project.dependencies.platform(libs.koin.bom))
+    implementation(libs.koin.core)
 }
