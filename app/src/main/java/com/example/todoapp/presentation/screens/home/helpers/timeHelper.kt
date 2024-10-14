@@ -2,7 +2,9 @@ package com.example.todoapp.presentation.screens.home.helpers
 
 import com.example.todoapp.domain.model.WeekDay
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeParseException
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 fun formatDate(pattern: String, date: Calendar): String {
@@ -14,6 +16,12 @@ fun isSameDay(calendar1: Calendar, calendar2: Calendar): Boolean {
     return calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR) &&
             calendar1.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH) &&
             calendar1.get(Calendar.DAY_OF_YEAR) == calendar2.get(Calendar.DAY_OF_YEAR)
+}
+
+fun dateToCalendar(date: Date): Calendar {
+    val calendar = Calendar.getInstance()
+    calendar.time = date
+    return calendar
 }
 
 fun getWeekDaysWithDates(): List<WeekDay> {

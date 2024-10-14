@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="@drawable/bottom_border"
+    android:orientation="horizontal"
+    android:paddingVertical="16dp">
+
+    <TextView
+        android:id="@+id/tvMenuCategoryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Pessoal"
+        android:textColor="@color/gray_950"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvMenuCategoryTaskCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:text="10 tarefas"
+        android:textAlignment="textEnd"
+        android:textColor="@color/gray_500"
+        android:textSize="10sp" />
+</LinearLayout>

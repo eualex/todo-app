@@ -1,6 +1,7 @@
 package com.example.todoapp.domain.model;
 
 data class Category(
+    val id: Long = 0L,
     val title: String,
-    val taskList: List<Task>
+    var taskList: List<Task> = emptyList()
 )

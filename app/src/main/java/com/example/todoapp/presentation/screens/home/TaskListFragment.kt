@@ -29,7 +29,14 @@ class TaskListFragment: Fragment() {
         binding.rvTaskGroupList.layoutManager = LinearLayoutManager(view.context)
 
         lifecycleScope.launch {
-            viewModel.filteredTaskListGroup.collect(taskGroupListAdapter::updateTaskListGroup)
+            viewModel.filteredTaskListGroup.collect { filteredTaskListGroup ->
+                taskGroupListAdapter.updateTaskListGroup(filteredTaskListGroup)
+                binding.tvEmptyTask.visibility = if(filteredTaskListGroup.isEmpty()) {
+                    View.VISIBLE
+                } else  {
+                    View.GONE
+                }
+            }
         }
 
         return view

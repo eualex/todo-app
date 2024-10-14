@@ -5,6 +5,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.todoapp.infra.di.repositoryModule
+import com.example.todoapp.infra.di.todoDatabaseDao
 import com.example.todoapp.presentation.screens.di.screenModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -26,7 +28,9 @@ class MainActivity : AppCompatActivity() {
             androidContext(this@MainActivity)
             modules(
                 listOf(
-                    screenModule
+                    screenModule,
+                    todoDatabaseDao,
+                    repositoryModule
                 )
             )
         }

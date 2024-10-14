@@ -28,39 +28,41 @@ class SearchViewModel: ViewModel() {
     fun toggleResult() {
         _result.value = when(filterBy.value) {
             FilterType.Category -> SearchResult.CategoryResult(
-                listOf(
-                    Category(
-                        "Pessoal",
-                        emptyList()
-                    ),
-                    Category(
-                        "Trabalho",
-                        emptyList()
-                    ),
-                    Category(
-                        "Hobby",
-                        emptyList()
-                    ),
-                ),
+                emptyList()
+//                listOf(
+//                    Category(
+//                        "Pessoal",
+//                        emptyList()
+//                    ),
+//                    Category(
+//                        "Trabalho",
+//                        emptyList()
+//                    ),
+//                    Category(
+//                        "Hobby",
+//                        emptyList()
+//                    ),
+//                ),
             )
 
             FilterType.Task -> SearchResult.TaskResult(
-                listOf(
-                    Task(
-                        "Fazer tela",
-                        Category(
-                            "Trabalho",
-                            emptyList()
-                        )
-                    ),
-                    Task(
-                        "Musculação",
-                        Category(
-                            "Hobby",
-                            emptyList()
-                        )
-                    )
-                )
+                emptyList()
+//                listOf(
+//                    Task(
+//                        "Fazer tela",
+//                        Category(
+//                            "Trabalho",
+//                            emptyList()
+//                        )
+//                    ),
+//                    Task(
+//                        "Musculação",
+//                        Category(
+//                            "Hobby",
+//                            emptyList()
+//                        )
+//                    )
+//                )
             )
 
             FilterType.Empty -> SearchResult.Loading
