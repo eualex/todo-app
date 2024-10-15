@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -62,6 +63,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.loadTaskGroup()
+        viewModel.loadCategories()
     }
 
     private fun createBottomDialog(view: Int): Dialog {
@@ -147,7 +149,6 @@ class HomeFragment : Fragment() {
     private fun setupAddTaskDialog() {
         val addTaskBottomDialog = createBottomDialog(R.layout.create_task_bottom_dialog)
 
-        viewModel.loadCategories()
         viewModel.setCategory(null)
         viewModel.setTaskDate(null)
 
@@ -270,7 +271,6 @@ class HomeFragment : Fragment() {
         menuCategoriesRecyclerView.adapter = menuBottomCategoryAdapter
         menuCategoriesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.loadCategories()
         lifecycleScope.launch {
             viewModel.categories.collect { result ->
                 when (result) {
@@ -391,7 +391,7 @@ class HomeFragment : Fragment() {
             if (weekDay.isDisabled) {
                 val nextTabIndex = index + 1
                 binding.taskViewPager.setCurrentItem(nextTabIndex, false)
-                viewModel.filterTaskList(viewModel.weekDays[nextTabIndex].dayNumber)
+//                viewModel.filterTaskList(viewModel.weekDays[nextTabIndex].dayNumber)
             }
         }
     }

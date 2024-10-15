@@ -1,5 +1,6 @@
 package com.example.todoapp.presentation.screens.home
 
+import android.util.AndroidRuntimeException
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

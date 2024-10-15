@@ -24,6 +24,12 @@ class TaskListFragment: Fragment() {
         binding = FragmentTaskGroupListBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val taskGroupListAdapter = TaskGroupListAdapter(viewModel.filteredTaskListGroup.value)
 
         binding.rvTaskGroupList.adapter = taskGroupListAdapter
@@ -39,7 +45,5 @@ class TaskListFragment: Fragment() {
                 }
             }
         }
-
-        return view
     }
 }

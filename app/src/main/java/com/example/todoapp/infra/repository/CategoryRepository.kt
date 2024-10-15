@@ -15,17 +15,19 @@ class CategoryRepository(private val categoryDao: ICategoryDao) {
         return categoryDao.findAll().map { rawCategory ->
             val category = Category(
                 title = rawCategory.category.name,
-                taskList = emptyList(),
+                taskList = rawCategory.taskList.map { rawTask -> Task(
+                    title = rawTask.title,
+                    category =  Category(
+                        title = rawCategory.category.name,
+                        taskList = emptyList(),
+                        id = rawCategory.category.categoryId
+                    ),
+                    finished = rawTask.finished,
+                    date = Date(rawTask.date),
+                    id = rawTask.taskId
+                ) },
                 id = rawCategory.category.categoryId
             )
-            val taskList = rawCategory.taskList.map { rawTask -> Task(
-                title = rawTask.title,
-                category = category,
-                finished = rawTask.finished,
-                date = Date(rawTask.date),
-                id = rawTask.taskId
-            ) }
-            category.taskList = taskList
             category
         }
     }
