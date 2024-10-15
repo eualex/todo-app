@@ -52,7 +52,7 @@ class HomeViewModel(
     private val _taskDate = MutableStateFlow<Date?>(null)
     val taskDate = _taskDate.asStateFlow()
 
-    fun filterTaskList(selectedDay: String) {
+    fun filterTaskList(selectedDay: String? = null) {
         val targetDay = weekDays.find {
             it.dayNumber == selectedDay
         }
@@ -73,9 +73,12 @@ class HomeViewModel(
     fun loadTaskGroup() {
         viewModelScope.launch {
             val tasks = taskRepository.findAll()
-            _taskGroup.value = TaskGroupResult.Success(weekDays.mapNotNull { weekDay ->
+            val taskGroupSuccess = TaskGroupResult.Success(weekDays.mapNotNull { weekDay ->
                 val taskOfDayList =
-                    tasks.filter { isSameDay(weekDay.date, dateToCalendar(it.date)) }
+                    tasks.filter {
+                        val res = isSameDay(weekDay.date, dateToCalendar(it.date))
+                        res
+                    }
                 if (taskOfDayList.isEmpty()) {
                     null
                 } else {
@@ -85,6 +88,8 @@ class HomeViewModel(
                     )
                 }
             })
+
+            _taskGroup.value = taskGroupSuccess
         }
     }
 
@@ -114,9 +119,18 @@ class HomeViewModel(
         _taskDate.value = date
     }
 
-    fun createTask(title: String, date: Date) {
+    fun createTask(title: String) {
+        if(_category.value == null || _taskDate.value == null) return
+        // TODO: add either
         viewModelScope.launch {
-
+            taskRepository.create(
+                task = Task(
+                    title = title,
+                    category = _category.value as Category,
+                    date = _taskDate.value as Date,
+                    finished = false,
+                )
+            )
         }
     }
 }

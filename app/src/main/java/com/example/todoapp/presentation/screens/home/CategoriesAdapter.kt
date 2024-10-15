@@ -25,7 +25,7 @@ class CategoriesAdapter(val onSelectCategory: (Category) -> Unit) :
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setSelectedCategory(category: Category) {
+    fun setSelectedCategory(category: Category?) {
 
         selectedCategory = category
         // TODO: implement better deactivation of current active item

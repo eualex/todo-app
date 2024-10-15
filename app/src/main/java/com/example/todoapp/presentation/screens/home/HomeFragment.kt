@@ -4,7 +4,6 @@ import TaskListFragment
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Gravity
@@ -42,9 +41,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -67,7 +64,7 @@ class HomeFragment : Fragment() {
         viewModel.loadTaskGroup()
     }
 
-    private fun createDialog(view: Int): Dialog {
+    private fun createBottomDialog(view: Int): Dialog {
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(view)
@@ -83,21 +80,20 @@ class HomeFragment : Fragment() {
     private fun setupTaskDatePickerDialog() {
         val calendar = Calendar.getInstance()
 
-//        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
-//        val startOfWeek = calendar.timeInMillis
-//
-//        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY)
-//        val endOfWeek = calendar.timeInMillis
-
         val datePickerDialog = DatePickerDialog(
             requireContext(),
             { _, year, month, dayOfMonth ->
+                val taskDateCalendar = Calendar.getInstance()
+
                 val taskDate = SimpleDateFormat(
-                    "yyyy-MM-dd",
-                    Locale.getDefault()
+                    "yyyy-MM-dd", Locale.getDefault()
                 ).parse("$year-$month-$dayOfMonth")
 
-                viewModel.setTaskDate(taskDate)
+                taskDateCalendar.set(Calendar.YEAR, year)
+                taskDateCalendar.set(Calendar.MONTH, month)
+                taskDateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+                viewModel.setTaskDate(taskDateCalendar.time)
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
@@ -109,21 +105,18 @@ class HomeFragment : Fragment() {
         datePickerDialog.show()
     }
 
-    private fun setupCategoryModal(dialog: Dialog) {
-        dialog.hide()
-        val clCategoryModal = binding.clCategoryModal
+    private fun setupCategoryDialog(onClose: () -> Unit) {
+        val clCategoryModal = binding.clCategoryModalReference.clCategoryModal
         show(clCategoryModal)
-        val cancelCardView: CardView =
-            clCategoryModal.findViewById(R.id.cvCancelCategoryModal)
-        val submitCardView: CardView =
-            clCategoryModal.findViewById(R.id.cvSubmitCategoryModal)
+        val cancelCardView: CardView = clCategoryModal.findViewById(R.id.cvCancelCategoryModal)
+        val submitCardView: CardView = clCategoryModal.findViewById(R.id.cvSubmitCategoryModal)
         cancelCardView.setOnClickListener {
             hide(clCategoryModal)
-            dialog.show()
+            onClose()
         }
         submitCardView.setOnClickListener {
             hide(clCategoryModal)
-            dialog.show()
+            onClose()
         }
 
         val categoriesAdapter = CategoriesAdapter(viewModel::setCategory)
@@ -131,26 +124,16 @@ class HomeFragment : Fragment() {
             clCategoryModal.findViewById(R.id.rvCategoryList)
         categoryListRecyclerView.adapter = categoriesAdapter
         categoryListRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val (categories) = viewModel.categories.value as CategoryResult.Success
 
-        viewModel.loadCategories()
-        lifecycleScope.launch {
-            viewModel.categories.collect { result ->
-                when (result) {
-                    is CategoryResult.Loading -> {}
-                    is CategoryResult.Error -> {}
-                    is CategoryResult.Success -> {
-                        categoriesAdapter.setCategories(result.categories)
+        categoriesAdapter.setCategories(categories)
 
-                        clCategoryModal.findViewById<TextView>(R.id.tvEmptyCategories).visibility =
-                            if (result.categories.isEmpty()) {
-                                View.VISIBLE
-                            } else {
-                                View.GONE
-                            }
-                    }
-                }
+        clCategoryModal.findViewById<TextView>(R.id.tvEmptyCategories).visibility =
+            if (categories.isEmpty()) {
+                View.VISIBLE
+            } else {
+                View.GONE
             }
-        }
 
         lifecycleScope.launch {
             viewModel.category.collect { category ->
@@ -162,26 +145,36 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupAddTaskDialog() {
-        val dialog = createDialog(R.layout.create_task_bottom_dialog)
+        val addTaskBottomDialog = createBottomDialog(R.layout.create_task_bottom_dialog)
 
+        viewModel.loadCategories()
         viewModel.setCategory(null)
         viewModel.setTaskDate(null)
 
-        dialog.show()
+        addTaskBottomDialog.show()
 
-        val taskDateCardView: CardView = dialog.findViewById(R.id.cvTaskDate)
+        val taskDateCardView: CardView = addTaskBottomDialog.findViewById(R.id.cvTaskDate)
         taskDateCardView.setOnClickListener {
             setupTaskDatePickerDialog()
         }
 
-        val categoryCardView: CardView = dialog.findViewById(R.id.cvTaskCategory)
+        val categoryCardView: CardView = addTaskBottomDialog.findViewById(R.id.cvTaskCategory)
         categoryCardView.setOnClickListener {
-            setupCategoryModal(dialog)
+            addTaskBottomDialog.hide()
+            setupCategoryDialog(
+                onClose = addTaskBottomDialog::show
+            )
         }
 
-        val sendCardView: CardView = dialog.findViewById(R.id.cvCreateTask)
-        sendCardView.setOnClickListener {
-            val taskTitle = dialog.findViewById<TextView>(R.id.etTaskTitle).text.toString()
+        val createTaskCardView: CardView = addTaskBottomDialog.findViewById(R.id.cvCreateTask)
+        createTaskCardView.setOnClickListener {
+            val taskTitle =
+                addTaskBottomDialog.findViewById<TextView>(R.id.etTaskTitle).text.toString()
+            viewModel.createTask(
+                title = taskTitle,
+            )
+            viewModel.loadTaskGroup()
+            addTaskBottomDialog.hide()
         }
 
         lifecycleScope.launch {
@@ -235,78 +228,80 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun setupMenuDialog() {
+        val dialog = createBottomDialog(R.layout.menu_bottom_dialog)
+        dialog.show()
+        val configCardView = dialog.findViewById<CardView>(R.id.cvSettings)
+        configCardView.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_settingsFragment)
+            dialog.hide()
+        }
+
+        val menuBottomCategoryAdapter = MenuBottomCategoriesAdapter()
+        val menuCategoriesRecyclerView =
+            dialog.findViewById<RecyclerView>(R.id.rvMenuCategoryList)
+        val addCategoryCardView: CardView = dialog.findViewById(R.id.cvAddCategory)
+
+        addCategoryCardView.setOnClickListener {
+            dialog.hide()
+            show(binding.clAddCategoryModalReference.clAddCategoryModal)
+        }
+
+        fun clearAndCloseAddCategoryModal() {
+            hide(binding.clAddCategoryModalReference.clAddCategoryModal)
+            dialog.show()
+            binding.clAddCategoryModalReference.tietAddCategoryTitle.text?.clear()
+        }
+
+        binding.clAddCategoryModalReference.cvCancelAddCategoryModal.setOnClickListener {
+            clearAndCloseAddCategoryModal()
+        }
+
+        binding.clAddCategoryModalReference.cvSubmitAddCategoryModal.setOnClickListener {
+            val categoryTitle =
+                binding.clAddCategoryModalReference.tietAddCategoryTitle.text.toString()
+            if (categoryTitle.isNotEmpty()) {
+                viewModel.createCategory(title = categoryTitle)
+                viewModel.loadCategories()
+                clearAndCloseAddCategoryModal()
+            }
+        }
+
+        menuCategoriesRecyclerView.adapter = menuBottomCategoryAdapter
+        menuCategoriesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        viewModel.loadCategories()
+        lifecycleScope.launch {
+            viewModel.categories.collect { result ->
+                when (result) {
+                    is CategoryResult.Loading -> {}
+                    is CategoryResult.Error -> {}
+                    is CategoryResult.Success -> {
+                        menuBottomCategoryAdapter.setCategories(result.categories)
+
+                        dialog.findViewById<View>(R.id.llCategoryWrapper).visibility =
+                            if (result.categories.isEmpty()) {
+                                View.GONE
+                            } else {
+                                View.VISIBLE
+                            }
+                    }
+                }
+            }
+        }
+    }
+
     private fun setupBottomAppBar() {
         binding.cvAddTask.setOnClickListener {
             setupAddTaskDialog()
         }
 
         binding.cvMenu.setOnClickListener {
-            val dialog = createDialog(R.layout.menu_bottom_dialog)
-            dialog.show()
-            val configCardView = dialog.findViewById<CardView>(R.id.cvSettings)
-            configCardView.setOnClickListener {
-                findNavController()
-                    .navigate(R.id.action_homeFragment_to_settingsFragment)
-                dialog.hide()
-            }
-
-            val menuBottomCategoryAdapter = MenuBottomCategoriesAdapter()
-            val menuCategoriesRecyclerView =
-                dialog.findViewById<RecyclerView>(R.id.rvMenuCategoryList)
-            val addCategoryCardView: CardView = dialog.findViewById(R.id.cvAddCategory)
-
-            addCategoryCardView.setOnClickListener {
-                dialog.hide()
-                show(binding.clAddCategoryModal)
-            }
-
-
-            fun clearAndCloseAddCategoryModal() {
-                hide(binding.clAddCategoryModal)
-                dialog.show()
-                binding.tietAddCategoryTitle.text?.clear()
-            }
-
-            binding.cvCancelAddCategoryModal.setOnClickListener {
-                clearAndCloseAddCategoryModal()
-            }
-
-            binding.cvSubmitAddCategoryModal.setOnClickListener {
-                val categoryTitle = binding.tietAddCategoryTitle.text.toString()
-                if (categoryTitle.isNotEmpty()) {
-                    viewModel.createCategory(title = categoryTitle)
-                    viewModel.loadCategories()
-                    clearAndCloseAddCategoryModal()
-                }
-            }
-
-            menuCategoriesRecyclerView.adapter = menuBottomCategoryAdapter
-            menuCategoriesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-            viewModel.loadCategories()
-            lifecycleScope.launch {
-                viewModel.categories.collect { result ->
-                    when (result) {
-                        is CategoryResult.Loading -> {}
-                        is CategoryResult.Error -> {}
-                        is CategoryResult.Success -> {
-                            menuBottomCategoryAdapter.setCategories(result.categories)
-
-                            dialog.findViewById<View>(R.id.llCategoryWrapper).visibility =
-                                if (result.categories.isEmpty()) {
-                                    View.GONE
-                                } else {
-                                    View.VISIBLE
-                                }
-                        }
-                    }
-                }
-            }
+            setupMenuDialog()
         }
 
         binding.cvSearch.setOnClickListener {
-            findNavController()
-                .navigate(R.id.action_homeFragment_to_searchFragment)
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
         }
     }
 
@@ -396,6 +391,7 @@ class HomeFragment : Fragment() {
             if (weekDay.isDisabled) {
                 val nextTabIndex = index + 1
                 binding.taskViewPager.setCurrentItem(nextTabIndex, false)
+                viewModel.filterTaskList(viewModel.weekDays[nextTabIndex].dayNumber)
             }
         }
     }

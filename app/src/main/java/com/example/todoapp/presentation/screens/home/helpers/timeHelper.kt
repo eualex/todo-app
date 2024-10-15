@@ -1,10 +1,12 @@
 package com.example.todoapp.presentation.screens.home.helpers
 
+import android.util.Log
 import com.example.todoapp.domain.model.WeekDay
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeParseException
 import java.util.Calendar
 import java.util.Date
+import java.util.GregorianCalendar
 import java.util.Locale
 
 fun formatDate(pattern: String, date: Calendar): String {
@@ -14,7 +16,6 @@ fun formatDate(pattern: String, date: Calendar): String {
 
 fun isSameDay(calendar1: Calendar, calendar2: Calendar): Boolean {
     return calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR) &&
-            calendar1.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH) &&
             calendar1.get(Calendar.DAY_OF_YEAR) == calendar2.get(Calendar.DAY_OF_YEAR)
 }
 
